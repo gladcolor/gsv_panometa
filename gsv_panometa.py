@@ -5,11 +5,8 @@ import numpy as np
 import struct
 import PIL
 import os
-import copy
+
 import zlib
-
-from libtiff import TIFF
-
 
 try:
     import Image
