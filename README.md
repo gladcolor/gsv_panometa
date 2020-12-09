@@ -1,7 +1,9 @@
 # gsv_panometa
 This light package is used to obtain depthmap of Google Street View. Please refer to this greate post:
 
- [Creating point clouds with Google Street View](https://medium.com/@nocomputer/creating-point-clouds-with-google-street-view-185faad9d4ee). 
+[Creating point clouds with Google Street View](https://medium.com/@nocomputer/creating-point-clouds-with-google-street-view-185faad9d4ee).
+
+Note that the API used in that post is ineffective, this repository uses annother API to obtain metadata of panoramas, but still subject to the future policy of Google Street View. 
 
 Most code comes from here:
 
