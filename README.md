@@ -1,5 +1,5 @@
 # gsv_panometa
-This light package is used to obtain depthmap of Google Street View. Please refer to this greate post:
+This light package is used to obtain depthmap of Google Street View. Please refer to this great post:
 
 [Creating point clouds with Google Street View](https://medium.com/@nocomputer/creating-point-clouds-with-google-street-view-185faad9d4ee).
 
@@ -11,7 +11,7 @@ Most code comes from here:
 
 # How to use
 
-Put gsv.panometa.py in the a folder, then follow the code below:
+Put gsv.panometa.py in the a folder, then follow the code below:0
 
 ```python
 import gsv_panometa as gsv
