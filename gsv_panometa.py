@@ -62,13 +62,37 @@ def _getGeoPhotoJS_frm_lonlat(lon, lat):
     return requests.get(url, proxies=None)
 
 
+def getNextJson(jdata='', pre_panoId=""):
+    try:
+        yaw = float(jdata['Projection']['pano_yaw_deg'])
+        links = jdata["Links"]
+        # print("jdata[Links]: ", jdata["Links"])
+        yaw_in_links = [float(link['yawDeg']) for link in links]
+        # yaw_in_links = [float(link['yawDeg']) for link in links]
+        # print("yaw_in_links: ", yaw_in_links)
 
-def getNextJson(jdata=''):
-    jdata = getPanoJson_from_panoId('_5x1IhTG4sX9h2qdp4_ZhA')
-    print(jdata)
-    nextJson = ''
+        diff = [abs(yawDeg - yaw) for yawDeg in yaw_in_links]
+        idx = diff.index(min(diff))
+        # print(idx, diff)
+        panoId = links[idx]['panoId']  # Warning: Not necessarily the second link node is the next panorama.
+        # print("getNextJson: ", panoId, pre_panoId)
+        if (panoId == pre_panoId) and (len(links) > 1):
+            diff.pop(idx)
+            links.pop(idx)
+            idx = diff.index(min(diff))
 
-    return nextJson
+            panoId = links[idx]['panoId']
+            return getPanoJson_from_panoId(panoId)
+
+        if len(links) == 1:
+            return 0
+        else:
+            return getPanoJson_from_panoId(panoId)
+
+    except Exception as e:
+        print("Error in getNextJson(): ", e)
+        print("panoId: ", pre_panoId)
+        return 0
 
 def getLastJson(jdata):
     lastJson = ''
@@ -217,8 +241,10 @@ class gsv_depthmap(object):
 
     def getDepthmapfrmJson(self, jdata, saved_path=''):
         try:
-            depthMapData = self.parse(jdata[1][0][5][0][5][1][2], compressed=True)
-            panoId = jdata[1][0][1][1]
+            # depthMapData = self.parse(jdata[1][0][5][0][5][1][2], compressed=True)
+            # panoId = jdata[1][0][1][1]
+            depthMapData = self.parse(jdata['model']['depth_map'], compressed=True)
+            panoId = jdata['Location']['panoId']
 
             # depthMapData = self.parse(jdata[1][0][11], compressed=True)
             # parse first bytes to describe data
@@ -316,7 +342,7 @@ def gsv_panometa_test():
 
 
     panoId = getPanoId(lon, lat)
-    panoId = 'q6qEWIimP-SsWRkX6SEjTg'
+    # panoId = 'q6qEWIimP-SsWRkX6SEjTg'
 
     saved_path = os.getcwd()
     if getDepthmap_from_panoId(panoId, saved_path):
@@ -324,6 +350,10 @@ def gsv_panometa_test():
     else:
         print("Test failed!")
 
+    jdata = getPanoJson_from_panoId(panoId)
+
+    getNextJson(jdata, panoId)
+
 if __name__ == "__main__":
-    # gsv_panometa_test()
-    getNextJson()
+    gsv_panometa_test()
+
