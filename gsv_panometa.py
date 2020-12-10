@@ -8,6 +8,8 @@ import os
 
 import zlib
 
+import utils
+
 try:
     import Image
 except ImportError:
@@ -36,6 +38,7 @@ def getPanoJson_from_panoId(panoId):
     try:
         jdata = json.loads(line)
         jdata = gsv_dm.compressJson(jdata)
+        jdata = utils.refactorJson(jdata)
     except:
         jdata = ""   # if there is no panorama
     return jdata
@@ -58,6 +61,18 @@ def _getGeoPhotoJS_frm_lonlat(lon, lat):
     url = url.format(lat, lon)
     return requests.get(url, proxies=None)
 
+
+
+def getNextJson(jdata=''):
+    jdata = getPanoJson_from_panoId('_5x1IhTG4sX9h2qdp4_ZhA')
+    print(jdata)
+    nextJson = ''
+
+    return nextJson
+
+def getLastJson(jdata):
+    lastJson = ''
+    return lastJson
 
 class gsv_depthmap(object):
     def parse(self, b64_string, compressed=True):
@@ -301,6 +316,7 @@ def gsv_panometa_test():
 
 
     panoId = getPanoId(lon, lat)
+    panoId = 'q6qEWIimP-SsWRkX6SEjTg'
 
     saved_path = os.getcwd()
     if getDepthmap_from_panoId(panoId, saved_path):
@@ -309,4 +325,5 @@ def gsv_panometa_test():
         print("Test failed!")
 
 if __name__ == "__main__":
-    gsv_panometa_test()
+    # gsv_panometa_test()
+    getNextJson()
